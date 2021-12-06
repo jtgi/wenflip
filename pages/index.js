@@ -1,2 +1,5 @@
-const Hello = () => <div>Hello</div>;
+function Hello() {
+  return <div>Hello</div>;
+}
+
 export default Hello;
