@@ -19,10 +19,6 @@ export default function Index() {
       { name: "SupDucks", slug: "supducks" },
       { name: "World of Women", slug: "world-of-women-nft" },
     ],
-    [
-      { name: "Lazy Lions", slug: "lazy-lions" },
-      { name: "Creature World", slug: "creatureworld" },
-    ],
   ];
 
   return (
