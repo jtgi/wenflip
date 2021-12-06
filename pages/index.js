@@ -40,50 +40,64 @@ export default function Index() {
 
       <section>
         <h1>(╯°Д°)╯︵/(.□ . \)</h1>
-        <h3>
+        <h2>
           Compare floors of any two opensea collections
           <br />
-        </h3>
+        </h2>
       </section>
 
-      <section>
+      <section className="link-list">
         {pairs.map((pair, index) => (
           <div key={index}>
             <span style={{ fontSize: "0.5rem" }}>◇</span>{" "}
-            <h1 className="link">
-              <span style={{ fontSize: "0.5rem" }}>
-                <a href={`${pair[0].slug}/${pair[1].slug}`}>
-                  wenflip.xyz/{pair[0].slug}/{pair[1].slug}
-                </a>
-              </span>
-            </h1>
+            <h3>
+              <a href={`${pair[0].slug}/${pair[1].slug}`}>
+                wenflip.xyz/{pair[0].slug}/{pair[1].slug}
+              </a>
+            </h3>
           </div>
         ))}
       </section>
+
       <style jsx>{`
+        .link-list {
+          margin-bottom: 3rem;
+        }
         h1 {
           margin: 0;
           font-size: 2rem;
+        }
+
+        h2 {
+          font-size: 1.5rem;
         }
 
         section {
           text-align: center;
         }
 
-        .link a {
+        h3 a {
           text-decoration: none;
           color: white;
         }
 
-        .link a:hover,
-        .link a:focus,
-        .link a:active {
+        h3 a:hover,
+        h3 a:focus,
+        h3 a:active {
           text-decoration: underline;
         }
 
         @media (max-width: 600px) {
           h1 {
             font-size: 1rem;
+          }
+
+          h2 {
+            font-size: 1rem;
+          }
+
+          h3 {
+            font-size: 0.6rem;
           }
         }
       `}</style>
