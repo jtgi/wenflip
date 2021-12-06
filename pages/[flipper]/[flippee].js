@@ -2,6 +2,7 @@ import Head from "next/head";
 import { useRef, useEffect, useState } from "react";
 import axios from "axios";
 import cheerio from "cheerio";
+import Confetti from "react-confetti";
 
 export async function getServerSideProps({ req, res, params }) {
   try {
@@ -175,7 +176,7 @@ const ProgressBar = ({ percent, flipper, flippee }) => {
           className="progress"
           style={{
             width: value * percent + "px",
-            backgroundColor: "rgb(204, 207, 12)",
+            backgroundColor: "rgba(204, 207, 12, 0.95)",
             height: "4rem",
             position: "relative",
             borderRadius: "2rem",
@@ -196,6 +197,7 @@ const ProgressBar = ({ percent, flipper, flippee }) => {
 export default function Home({ flipper, flippee, error }) {
   const max = Math.max(flipper.floor, flippee.floor);
   const pctFlipped = flipper.floor / flippee.floor;
+  const isFlipped = flipper.floor > flippee.floor;
 
   return (
     <div className="container">
@@ -209,6 +211,8 @@ export default function Home({ flipper, flippee, error }) {
           rel="stylesheet"
         />
       </Head>
+
+      {isFlipped && <Confetti width={"3000"} height={"3000"} />}
 
       <main>
         <section className="info">
@@ -245,6 +249,10 @@ export default function Home({ flipper, flippee, error }) {
         <br />
         making nfts?&nbsp;
         <a href="https://nftjoy.club/waitlist">nftjoy.club/waitlist</a>
+        <br />
+        <p className="footnote">
+          authors of this website do not advocate flippenings – srsly ppl wagmi
+        </p>
       </footer>
 
       <style jsx>{`
@@ -269,7 +277,7 @@ export default function Home({ flipper, flippee, error }) {
         footer {
           width: 100%;
           height: 100px;
-          border-top: 1px solid #f5b58f;
+          border-top: 1px solid rgb(199, 20, 20);
           padding-top: 20px;
           text-align: center;
           font-size: 0.7rem;
@@ -308,7 +316,10 @@ export default function Home({ flipper, flippee, error }) {
         h2 {
           background-color: black;
           color: white;
-          padding: 5px;
+          padding: 1rem;
+          border: 1px solid black;
+          border-radius: 0.5rem;
+          text-align: center;
         }
 
         img.pixelated {
@@ -339,6 +350,10 @@ export default function Home({ flipper, flippee, error }) {
             box-shadow: 0 0 1.2rem rgba(205, 220, 57, 0.5);
           }
         }
+        .footnote {
+          font-size: 6px;
+          font-family: sans-serif;
+        }
       `}</style>
 
       <style jsx global>{`
@@ -347,7 +362,7 @@ export default function Home({ flipper, flippee, error }) {
           padding: 0;
           margin: 0;
           font-size: 22px;
-          background-color: #ed5941;
+          background-color: #ef3434;
           font-family: Readex Pro, Roboto, Helvetica Neue, sans-serif;
         }
 
@@ -379,9 +394,9 @@ const getMessage = (flipper, flippee) => {
     return `they have the same floor, wow.`;
   } else if (flipper.floor > flippee.floor) {
     if (flippee.title.charAt(flippee.title.length - 1) === "s") {
-      return `The ${flippee.title} have been flipped.`;
+      return `The ${flippee.title} have been flippened.`;
     } else {
-      return `The ${flippee.title} has been flipped.`;
+      return `The ${flippee.title} has been flippened.`;
     }
   } else {
     return `${prettyDiff(flippee.floor - flipper.floor)} to go`;
