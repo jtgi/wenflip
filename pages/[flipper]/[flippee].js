@@ -1,8 +1,10 @@
 import Head from "next/head";
-import { useRef, useEffect, useState } from "react";
+import Link from "next/link";
 import axios from "axios";
 import cheerio from "cheerio";
-import Confetti from "react-confetti";
+import Celebration from "../../components/Celebration";
+import ProgressBar from "../../components/ProgressBar";
+import Tag from "../../components/Tag";
 
 export async function getServerSideProps({ req, res, params }) {
   try {
@@ -22,6 +24,7 @@ export async function getServerSideProps({ req, res, params }) {
       },
     };
   } catch (e) {
+    console.error(e.getMessage(), e);
     return {
       props: {
         error: e,
@@ -80,127 +83,21 @@ async function fetchPunksFloor() {
   };
 }
 
-const Tag = ({ item, value, isDown = true }) => {
-  return (
-    <div
-      className="label"
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        textAlign: "center",
-        alignItems: "center",
-        position: "absolute",
-        left: item.percent * value + "px",
-        top: "0.1rem",
-        transform: "translateX(-102%)",
-        transition: "1s ease",
-        transitionDelay: "0.5s",
-      }}
-    >
-      <div
-        style={{
-          width: "3.8rem",
-          height: "3.8rem",
-          overflow: "hidden",
-          border: "3px solid black",
-          borderRadius: "50%",
-          display: "flex",
-          alignItems: "center",
-          backgroundColor: "white",
-          justifyContent: "center",
-        }}
-      >
-        {item.imgSrc && (
-          <img
-            style={{
-              imageRendering: item.imgPixelated ? "pixelated" : "auto",
-              width: "4rem",
-            }}
-            src={item.imgSrc}
-          />
-        )}
-      </div>
-      <div
-        style={{
-          position: "absolute",
-          textAlign: "center",
-          fontSize: "1.3rem",
-          ...(isDown
-            ? {
-                bottom: 0,
-                marginTop: "0.7rem",
-                transform: "translateY(120%)",
-              }
-            : {
-                top: 0,
-                transform: "translateY(-110%)",
-              }),
-        }}
-      >
-        {item.value}
-      </div>
-    </div>
-  );
-};
-
-const ProgressBar = ({ percent, flipper, flippee }) => {
-  const [value, setValue] = useState(0);
-  const ref = useRef();
-
-  useEffect(() => {
-    const set = () => setValue(ref.current?.clientWidth || 0);
-
-    set();
-    window.addEventListener("resize", set);
-    return () => window.removeEventListener("resize", set);
-  }, []);
-
-  return (
-    <div style={{ position: "relative", width: "100%" }}>
-      <div
-        className="progress-wrap"
-        ref={ref}
-        style={{
-          width: "100%",
-          position: "relative",
-          height: "4rem",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "flex-start",
-          backgroundColor: "rgba(16,16,16)",
-          borderRadius: "2rem",
-          boxShadow: "5px 0px 40px rgba(255,255,255, 0.2)",
-        }}
-      >
-        <div
-          className="progress"
-          style={{
-            width: value * percent + "px",
-            backgroundColor: "rgba(204, 207, 12, 0.95)",
-            height: "4rem",
-            position: "relative",
-            borderRadius: "2rem",
-            zIndex: 5,
-            transition: "1s ease",
-            transitionDelay: "0.5s",
-            animation: "Pulse 2s infinite ease-in-out",
-          }}
-        >
-          <Tag item={flipper} value={value} />
-        </div>
-      </div>
-      <Tag isDown={false} item={flippee} value={value} />
-    </div>
-  );
-};
-
 export default function Home({ flipper, flippee, error }) {
+  if (error) {
+    return (
+      <div>
+        <h1>(┛◉Д◉)┛彡┻━┻</h1>
+        <h2>Something went wrong</h2>
+      </div>
+    );
+  }
   const max = Math.max(flipper.floor, flippee.floor);
   const pctFlipped = flipper.floor / flippee.floor;
   const isFlipped = flipper.floor > flippee.floor;
 
   return (
-    <div className="container">
+    <div>
       <Head>
         <title>wen flip? (╯°□°)╯</title>
         <link rel="icon" href="/favicon.ico" />
@@ -210,15 +107,26 @@ export default function Home({ flipper, flippee, error }) {
           href="https://fonts.googleapis.com/css2?family=Readex+Pro:wght@700&display=swap"
           rel="stylesheet"
         />
+        <meta
+          name="viewport"
+          content="width=device-width, initial-scale=1"
+        ></meta>
       </Head>
 
-      {isFlipped && <Confetti width={"3000"} height={"3000"} />}
+      {isFlipped && <Celebration />}
 
-      <main>
+      <div>
         <section className="info">
           <h1 className="title">
-            wen <a href={flipper.url}>{flipper.title.toLowerCase()}</a> flip{" "}
-            <a href={flippee.url}>{flippee.title.toLowerCase()}</a>?
+            wen{" "}
+            <a href={flipper.url} target="_blank">
+              {flipper.title.toLowerCase()}
+            </a>{" "}
+            flip{" "}
+            <a href={flippee.url} target="_blank">
+              {flippee.title.toLowerCase()}
+            </a>
+            ?
           </h1>
         </section>
 
@@ -239,67 +147,42 @@ export default function Home({ flipper, flippee, error }) {
           />
         </section>
 
-        <section>
+        <section
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
           <h2>{getMessage(flipper, flippee)}</h2>
         </section>
-      </main>
-
-      <footer>
-        made by&nbsp;<a href="https://twitter.com/jtgi">jtgi.eth</a>&nbsp;
-        <br />
-        making nfts?&nbsp;
-        <a href="https://nftjoy.club/waitlist">nftjoy.club/waitlist</a>
-        <br />
-        <p className="footnote">
-          authors of this website do not advocate flippenings – srsly ppl wagmi
-        </p>
-      </footer>
+      </div>
 
       <style jsx>{`
-        .container {
-          min-height: 100vh;
-          padding: 0 2rem;
-          display: flex;
-          flex-direction: column;
-          justify-content: center;
-          align-items: center;
-        }
-
-        main {
-          flex: 1;
-          display: flex;
-          padding: 2rem;
-          flex-direction: column;
-          justify-content: center;
-          align-items: center;
-        }
-
-        footer {
-          width: 100%;
-          height: 100px;
-          border-top: 1px solid rgb(199, 20, 20);
-          padding-top: 20px;
-          text-align: center;
-          font-size: 0.7rem;
-        }
-
         .info {
           margin-bottom: 3rem;
           text-align: center;
         }
 
-        .info h2 {
-          font-size: 2rem;
+        h2 {
+          font-size: 1.5rem;
           display: inline-block;
         }
 
         .graph {
+          margin-top: 3rem;
           margin-bottom: 3rem;
         }
 
         a {
           color: inherit;
           text-decoration: underline;
+        }
+
+        a:hover,
+        a:focus,
+        a:active {
+          color: white;
         }
 
         .title a {
@@ -335,7 +218,10 @@ export default function Home({ flipper, flippee, error }) {
 
         @media (max-width: 600px) {
           .title {
-            font-size: 2rem;
+            font-size: 1.5rem;
+          }
+          h2 {
+            font-size: 0.9rem;
           }
         }
 
@@ -349,25 +235,6 @@ export default function Home({ flipper, flippee, error }) {
           100% {
             box-shadow: 0 0 1.2rem rgba(205, 220, 57, 0.5);
           }
-        }
-        .footnote {
-          font-size: 6px;
-          font-family: sans-serif;
-        }
-      `}</style>
-
-      <style jsx global>{`
-        html,
-        body {
-          padding: 0;
-          margin: 0;
-          font-size: 22px;
-          background-color: #ef3434;
-          font-family: Readex Pro, Roboto, Helvetica Neue, sans-serif;
-        }
-
-        * {
-          box-sizing: border-box;
         }
       `}</style>
     </div>
@@ -394,9 +261,9 @@ const getMessage = (flipper, flippee) => {
     return `they have the same floor, wow.`;
   } else if (flipper.floor > flippee.floor) {
     if (flippee.title.charAt(flippee.title.length - 1) === "s") {
-      return `The ${flippee.title} have been flippened.`;
+      return `The ${flippee.title} have been flippened`;
     } else {
-      return `The ${flippee.title} has been flippened.`;
+      return `The ${flippee.title} has been flippened`;
     }
   } else {
     return `${prettyDiff(flippee.floor - flipper.floor)} to go`;
