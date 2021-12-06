@@ -1,39 +1,46 @@
-.RSPBprogressBar {
-  height: 10px;
-  line-height: 1;
-  border-radius: 10px;
-  position: relative;
-  background-color: rgba(211, 211, 211, 0.6);
+html,
+body {
+  padding: 0;
+  margin: 0;
+  font-size: 22px;
+  background-color: #ef3434;
+  font-family: Readex Pro, Roboto, Helvetica Neue, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.container {
   display: flex;
-  justify-content: space-between;
+  min-height: 100vh;
+  padding: 0 2rem;
+  flex-direction: column;
   align-items: center;
-  z-index: 0;
 }
-.RSPBprogressBar .RSPBstep {
-  display: inline-flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 0;
-  position: absolute;
-  transform: translateX(-50%);
-  transition-property: all;
-  transition-timing-function: ease;
+
+nav {
+  height: 150px;
 }
-.RSPBprogressBar .RSPBprogressBarText {
-  color: white;
-  font-size: 10px;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+
+footer {
+  width: 100%;
+  margin-top: auto;
+  height: 100px;
+  border-top: 1px solid rgb(199, 20, 20);
+  padding-top: 20px;
+  font-weight: 800;
+  text-align: center;
+  font-size: 0.7rem;
 }
-.RSPBprogressBar .RSPBprogression {
-  position: absolute;
-  transition: width 0.3s ease;
-  left: 0;
-  top: 0;
-  bottom: 0;
-  border-radius: 10px;
-  background: rgba(0, 116, 217, 0.8);
-  z-index: -1;
+
+a {
+  color: inherit;
+  text-decoration: underline;
+}
+
+.footnote {
+  font-size: 6px;
+  font-family: serif;
+  font-style: italic;
 }

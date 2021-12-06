@@ -102,7 +102,7 @@ export default function Home({ flipper, flippee, error }) {
         <title>wen flip? (╯°□°)╯</title>
         <link rel="icon" href="/favicon.ico" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin />
         <link
           href="https://fonts.googleapis.com/css2?family=Readex+Pro:wght@700&display=swap"
           rel="stylesheet"
@@ -160,7 +160,6 @@ export default function Home({ flipper, flippee, error }) {
 
       <style jsx>{`
         .info {
-          margin-bottom: 3rem;
           text-align: center;
         }
 

@@ -33,31 +33,37 @@ export default function Index() {
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
         <link
-          href="https://fonts.googleapis.com/css2?family=Readex+Pro:wght@700&display=swap"
+          href="https://fonts.googleapis.com/css2?family=Readex+Pro:wght@200;700&display=swap"
           rel="stylesheet"
         />
       </Head>
 
       <section>
         <h1>(╯°Д°)╯︵/(.□ . \)</h1>
-        {pairs.map((pair) => (
-          <div>
-            <h1 className="link">
-              <a href={`${pair[0].slug}/${pair[1].slug}`}>
-                wen{" "}
-                <span className="highlight">{pair[0].name.toLowerCase()}</span>{" "}
-                flip{" "}
-                <span className="highlight">{pair[1].name.toLowerCase()}</span>?
-              </a>
-            </h1>
+        <h3>
+          Compare floors of any two opensea collections
+          <br />
+        </h3>
+      </section>
+
+      <section>
+        {pairs.map((pair, index) => (
+          <div key={index}>
             <span style={{ fontSize: "0.5rem" }}>◇</span>{" "}
+            <h1 className="link">
+              <span style={{ fontSize: "0.5rem" }}>
+                <a href={`${pair[0].slug}/${pair[1].slug}`}>
+                  wenflip.xyz/{pair[0].slug}/{pair[1].slug}
+                </a>
+              </span>
+            </h1>
           </div>
         ))}
       </section>
-
       <style jsx>{`
-        .link {
+        h1 {
           margin: 0;
+          font-size: 2rem;
         }
 
         section {
