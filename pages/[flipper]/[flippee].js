@@ -79,7 +79,70 @@ async function fetchPunksFloor() {
   };
 }
 
-const ProgressBar = ({ percent, labels }) => {
+const Tag = ({ item, value, isDown = true }) => {
+  return (
+    <div
+      className="label"
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        textAlign: "center",
+        alignItems: "center",
+        position: "absolute",
+        left: item.percent * value + "px",
+        top: "0.1rem",
+        transform: "translateX(-102%)",
+        transition: "1s ease",
+        transitionDelay: "0.5s",
+      }}
+    >
+      <div
+        style={{
+          width: "3.8rem",
+          height: "3.8rem",
+          overflow: "hidden",
+          border: "3px solid black",
+          borderRadius: "50%",
+          display: "flex",
+          alignItems: "center",
+          backgroundColor: "white",
+          justifyContent: "center",
+        }}
+      >
+        {item.imgSrc && (
+          <img
+            style={{
+              imageRendering: item.imgPixelated ? "pixelated" : "auto",
+              width: "4rem",
+            }}
+            src={item.imgSrc}
+          />
+        )}
+      </div>
+      <div
+        style={{
+          position: "absolute",
+          textAlign: "center",
+          fontSize: "1.3rem",
+          ...(isDown
+            ? {
+                bottom: 0,
+                marginTop: "0.7rem",
+                transform: "translateY(120%)",
+              }
+            : {
+                top: 0,
+                transform: "translateY(-110%)",
+              }),
+        }}
+      >
+        {item.value}
+      </div>
+    </div>
+  );
+};
+
+const ProgressBar = ({ percent, flipper, flippee }) => {
   const [value, setValue] = useState(0);
   const ref = useRef();
 
@@ -92,7 +155,7 @@ const ProgressBar = ({ percent, labels }) => {
   }, []);
 
   return (
-    <div style={{ width: "100%" }}>
+    <div style={{ position: "relative", width: "100%" }}>
       <div
         className="progress-wrap"
         ref={ref}
@@ -102,96 +165,30 @@ const ProgressBar = ({ percent, labels }) => {
           height: "4rem",
           display: "flex",
           alignItems: "center",
-          padding: "0 5px",
           justifyContent: "flex-start",
-          backgroundColor: "rgba(255,255,255,0.5)",
+          backgroundColor: "rgba(16,16,16)",
           borderRadius: "2rem",
+          boxShadow: "5px 0px 40px rgba(255,255,255, 0.2)",
         }}
       >
         <div
           className="progress"
           style={{
             width: value * percent + "px",
-            backgroundColor: "#69cf0c",
-            height: "3.5rem",
+            backgroundColor: "rgb(204, 207, 12)",
+            height: "4rem",
+            position: "relative",
             borderRadius: "2rem",
+            zIndex: 5,
             transition: "1s ease",
             transitionDelay: "0.5s",
+            animation: "Pulse 2s infinite ease-in-out",
           }}
-        ></div>
-
-        {labels.map((label, i) => {
-          const offset = Math.round(label.percent * value);
-          const isDown = i % 2 === 0;
-
-          return (
-            <div
-              className="label"
-              key={label.name}
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                textAlign: "center",
-                alignItems: "center",
-                position: "absolute",
-                left: `${offset}px`,
-                transform: isDown
-                  ? "translate(-46%, 100%)"
-                  : "translate(-50%, -100%)",
-                backgroundColor: "white",
-                padding: "0.75rem",
-              }}
-            >
-              <div
-                className="arrow"
-                style={{
-                  width: 0,
-                  height: 0,
-                  borderStyle: "solid",
-                  position: "absolute",
-                  ...(isDown
-                    ? {
-                        top: "-2.65rem",
-                        borderWidth: "0 2.65rem 2.7rem 2.65rem",
-                        borderColor:
-                          "transparent transparent #ffffff transparent",
-                      }
-                    : {
-                        bottom: "-2.65rem",
-                        borderWidth: "2.7rem 2.65rem 0 2.65rem",
-                        borderColor: "#FFF transparent transparent transparent",
-                      }),
-                }}
-              ></div>
-              <div
-                style={{
-                  width: 60,
-                  height: 60,
-                  overflow: "hidden",
-                  border: "3px solid black",
-                  borderRadius: "50%",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                }}
-              >
-                {label.imgSrc && (
-                  <img
-                    style={{
-                      imageRendering: label.imgPixelated ? "pixelated" : "auto",
-                    }}
-                    src={label.imgSrc}
-                    width="70"
-                  />
-                )}
-              </div>
-              <div style={{ marginLeft: "0.5rem", fontSize: "1rem" }}>
-                {label.value}
-              </div>
-            </div>
-          );
-        })}
+        >
+          <Tag item={flipper} value={value} />
+        </div>
       </div>
+      <Tag isDown={false} item={flippee} value={value} />
     </div>
   );
 };
@@ -219,26 +216,27 @@ export default function Home({ flipper, flippee, error }) {
             wen <a href={flipper.url}>{flipper.title.toLowerCase()}</a> flip{" "}
             <a href={flippee.url}>{flippee.title.toLowerCase()}</a>?
           </h1>
-          <h2>{getMessage(flipper, flippee)}</h2>
         </section>
 
-        <section style={{ width: "80vw" }}>
+        <section className="graph" style={{ width: "80vw" }}>
           <ProgressBar
             css={{ backgroundColor: "red" }}
             percent={Math.min(pctFlipped, 1)}
-            labels={[
-              {
-                ...flipper,
-                percent: flipper.floor / max,
-                value: `${flipper.floor}Ξ`,
-              },
-              {
-                ...flippee,
-                percent: flippee.floor / max,
-                value: `${flippee.floor}Ξ`,
-              },
-            ]}
+            flipper={{
+              ...flipper,
+              percent: flipper.floor / max,
+              value: `${flipper.floor}Ξ`,
+            }}
+            flippee={{
+              ...flippee,
+              percent: flippee.floor / max,
+              value: `${flippee.floor}Ξ`,
+            }}
           />
+        </section>
+
+        <section>
+          <h2>{getMessage(flipper, flippee)}</h2>
         </section>
       </main>
 
@@ -274,17 +272,21 @@ export default function Home({ flipper, flippee, error }) {
           border-top: 1px solid #f5b58f;
           padding-top: 20px;
           text-align: center;
-          font-size: 0.9rem;
+          font-size: 0.7rem;
         }
 
         .info {
-          margin-bottom: 10rem;
+          margin-bottom: 3rem;
           text-align: center;
         }
 
         .info h2 {
           font-size: 2rem;
           display: inline-block;
+        }
+
+        .graph {
+          margin-bottom: 3rem;
         }
 
         a {
@@ -316,13 +318,25 @@ export default function Home({ flipper, flippee, error }) {
         .title {
           margin: 0;
           line-height: 1.15;
-          font-size: 3rem;
+          font-size: 2.5rem;
           text-align: center;
         }
 
         @media (max-width: 600px) {
           .title {
             font-size: 2rem;
+          }
+        }
+
+        @keyframes Pulse {
+          0% {
+            box-shadow: 0 0 1.2rem rgba(205, 220, 57, 0.5);
+          }
+          50% {
+            box-shadow: 0 0 1.5rem rgba(205, 220, 57, 0.99);
+          }
+          100% {
+            box-shadow: 0 0 1.2rem rgba(205, 220, 57, 0.5);
           }
         }
       `}</style>
@@ -333,7 +347,7 @@ export default function Home({ flipper, flippee, error }) {
           padding: 0;
           margin: 0;
           font-size: 22px;
-          background-color: #d89066;
+          background-color: #ed5941;
           font-family: Readex Pro, Roboto, Helvetica Neue, sans-serif;
         }
 
@@ -364,7 +378,11 @@ const getMessage = (flipper, flippee) => {
   if (flipper.floor === flippee.floor) {
     return `they have the same floor, wow.`;
   } else if (flipper.floor > flippee.floor) {
-    return `The ${flippee.title} have been flipped.`;
+    if (flippee.title.charAt(flippee.title.length - 1) === "s") {
+      return `The ${flippee.title} have been flipped.`;
+    } else {
+      return `The ${flippee.title} has been flipped.`;
+    }
   } else {
     return `${prettyDiff(flippee.floor - flipper.floor)} to go`;
   }
