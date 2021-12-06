@@ -1,6 +1,11 @@
+import Head from "next/head";
+
 export default function Layout({ children }) {
   return (
     <div className="container">
+      <Head>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+      </Head>
       <nav style={{ margin: "0 auto" }}>
         <div
           className="home"
