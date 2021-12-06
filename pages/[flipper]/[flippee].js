@@ -1,8 +1,8 @@
 import Head from "next/head";
+import dynamic from "next/dynamic";
 import Link from "next/link";
 import axios from "axios";
 import cheerio from "cheerio";
-import Celebration from "../../components/Celebration";
 import ProgressBar from "../../components/ProgressBar";
 import Tag from "../../components/Tag";
 
@@ -24,10 +24,10 @@ export async function getServerSideProps({ req, res, params }) {
       },
     };
   } catch (e) {
-    console.error(e.getMessage(), e);
+    console.error(e);
     return {
       props: {
-        error: e,
+        error: "That didn't work, try something else?",
       },
     };
   }
@@ -88,13 +88,16 @@ export default function Home({ flipper, flippee, error }) {
     return (
       <div>
         <h1>(┛◉Д◉)┛彡┻━┻</h1>
-        <h2>Something went wrong</h2>
+        <h2>That didn't work. Try something else?</h2>
       </div>
     );
   }
   const max = Math.max(flipper.floor, flippee.floor);
   const pctFlipped = flipper.floor / flippee.floor;
   const isFlipped = flipper.floor > flippee.floor;
+  const Celebration = dynamic(() => import("../../components/Celebration"), {
+    ssr: false,
+  });
 
   return (
     <div>
@@ -112,9 +115,7 @@ export default function Home({ flipper, flippee, error }) {
           content="width=device-width, initial-scale=1"
         ></meta>
       </Head>
-
       {isFlipped && <Celebration />}
-
       <div>
         <section className="info">
           <h1 className="title">
@@ -157,7 +158,6 @@ export default function Home({ flipper, flippee, error }) {
           <h2>{getMessage(flipper, flippee)}</h2>
         </section>
       </div>
-
       <style jsx>{`
         .info {
           text-align: center;

@@ -33,7 +33,7 @@ const ProgressBar = ({ percent, flipper, flippee }) => {
         <div
           className="progress"
           style={{
-            width: Math.max(value * percent, 60) + "px",
+            width: Math.max(value * percent, 88) + "px",
             backgroundColor: "rgba(204, 207, 12, 0.95)",
             height: "4rem",
             position: "relative",
