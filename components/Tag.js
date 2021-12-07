@@ -10,7 +10,7 @@ const Tag = ({ item, value, isDown = true }) => {
         position: "absolute",
         left: Math.max(item.percent * value, 88) + "px",
         top: "0.1rem",
-        // transform: "translateX(-102%)",
+        transform: "translateX(-102%)",
         transition: "1s ease",
         transitionDelay: "0.5s",
       }}
