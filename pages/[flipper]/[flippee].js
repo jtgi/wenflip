@@ -103,14 +103,8 @@ export default function Home({ flipper, flippee, error }) {
     <div>
       <Head>
         <title>wen flip? (╯°□°)╯</title>
-        <link rel="icon" href="/favicon.ico" />
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Readex+Pro:wght@700&display=swap"
-          rel="stylesheet"
-        />
       </Head>
+
       {isFlipped && <Celebration />}
       <div>
         <section className="info">

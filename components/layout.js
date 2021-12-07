@@ -1,40 +1,25 @@
 import Head from "next/head";
+import Footer from "./Footer";
+import Header from "./Header";
 
 export default function Layout({ children }) {
   return (
     <div className="container">
       <Head>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="icon" href="/favicon.ico" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Readex+Pro:wght@200;700&display=swap"
+          rel="stylesheet"
+        />
       </Head>
-      <nav style={{ margin: "0 auto" }}>
-        <div
-          className="home"
-          style={{
-            position: "absolute",
-            left: "50%",
-            transform: "translateX(-50%)",
-            top: 15,
-          }}
-        >
-          <a style={{ textDecoration: "none", fontSize: 35 }} href="/">
-            ⦿
-          </a>
-        </div>
-      </nav>
+      <Header />
 
       <main>{children}</main>
 
-      <footer>
-        making nfts?{" "}
-        <a href="https://nftjoy.club/waitlist">nftjoy.club/waitlist</a>
-        <br />
-        <span>
-          made by <a href="https://twitter.com/jtgi">jtgi.eth</a> <br />
-        </span>
-        <p className="footnote">
-          we do not advocate flippenings – srsly ppl wagmi
-        </p>
-      </footer>
+      <Footer />
     </div>
   );
 }
